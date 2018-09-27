@@ -1,8 +1,11 @@
 {
   "name": "gatsby-source-savedio",
+  "description": "Gatsby plugin that sources bookmarks from saved.io",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "author": "Cory Gibbons <hello@corygibbons.com>",
+  "repository": "https://github.com/corygibbons/gatsby-source-savedio",
   "dependencies": {
     "node-fetch": "^2.2.0",
     "query-string": "^6.1.0"
@@ -10,6 +13,6 @@
   "keywords": [
     "gatsby",
     "gatsby-plugin",
-    "gatsby-transformer-plugin"
+    "gatsby-source-plugin"
   ]
 }
