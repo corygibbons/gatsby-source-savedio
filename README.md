@@ -1,6 +1,6 @@
 # gatsby-source-savedio
 
-Plugin to source all bookmarks from saved.io
+Plugin to source all bookmarks from [saved.io](http://saved.io)
 
 ## Install
 
@@ -21,4 +21,24 @@ module.exports = {
     }
   ]
 };
+```
+
+## How to query
+
+You can query bookmark nodes like this:
+
+```graphql
+{
+  allSavedioBookmark {
+    edges {
+      node {
+        bk_id
+        bk_url
+        bk_title
+        bk_note
+        bk_date
+      }
+    }
+  }
+}
 ```
