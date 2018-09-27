@@ -29,8 +29,8 @@ exports.sourceNodes = async ({ actions, createNodeId }, configOptions) => {
     return nodeData;
   };
 
-  const validOptions = ({ devkey, key, list } = configOptions);
-  const apiOptions = queryString.stringify(validOptions);
+  const { devkey, key, list } = configOptions;
+  const apiOptions = queryString.stringify({ devkey, key, list });
 
   const PER_PAGE = 100;
   const API_URL = `http://devapi.saved.io/bookmarks?${apiOptions}`;
