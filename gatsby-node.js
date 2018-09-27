@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 const queryString = require('query-string');
 const crypto = require('crypto');
 
-exports.sourceNodes = ({ actions, createNodeId }, configOptions) => {
+exports.sourceNodes = async ({ actions, createNodeId }, configOptions) => {
   const { createNode } = actions;
 
   delete configOptions.plugins;
@@ -32,14 +32,36 @@ exports.sourceNodes = ({ actions, createNodeId }, configOptions) => {
   const validOptions = ({ devkey, key, list } = configOptions);
   const apiOptions = queryString.stringify(validOptions);
 
-  const apiUrl = `http://devapi.saved.io/bookmarks?${apiOptions}&limit=99999`;
+  const PER_PAGE = 100;
+  const API_URL = `http://devapi.saved.io/bookmarks?${apiOptions}`;
 
-  return fetch(apiUrl)
-    .then(response => response.json())
-    .then(data => {
-      data.forEach(bookmark => {
-        const nodeData = processBookmark(bookmark);
-        createNode(nodeData);
-      });
-    });
+  const getBookmarks = async () => {
+    let records = [];
+    let keepGoing = true;
+    let page = 1;
+
+    while (keepGoing) {
+      let response = await reqBookmarks(page);
+      const data = await response.json();
+      await records.push(...data);
+      page += 1;
+
+      if (data.length < PER_PAGE) {
+        keepGoing = false;
+        return records;
+      }
+    }
+  };
+
+  const reqBookmarks = async page => {
+    let payload = await fetch(`${API_URL}&limit=${PER_PAGE}&page=${page}`);
+    return payload;
+  };
+
+  const bookmarks = await getBookmarks();
+
+  return bookmarks.forEach(bookmark => {
+    const nodeData = processBookmark(bookmark);
+    createNode(nodeData);
+  });
 };
